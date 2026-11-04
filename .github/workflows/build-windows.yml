@@ -1,0 +1,32 @@
+
+name: Build Windows Executable
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install PyInstaller
+        run: python -m pip install pyinstaller
+
+      - name: Build executable
+        run: pyinstaller --noconfirm --clean --onefile --windowed --name Busquedas_IA61 busquedas_IA61.py
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: Busquedas_IA61-Windows
+          path: dist/Busquedas_IA61.exe
